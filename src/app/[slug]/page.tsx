@@ -1,9 +1,14 @@
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 
 import Topbar from "@/Components/Topbar";
 import SideBar from "@/Components/sideBar";
 import ChannelSection from "./Components/channelSection";
 
 export default function Channel() {
+    const params = useSearchParams()
+    console.log(params.get('id'))
 
     return (
         <div className="h-full">

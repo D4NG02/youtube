@@ -5,7 +5,7 @@ export default function IconButton({ src, className }: { src: string, className?
     const bgColor = className?.includes('bg-')?'':' bg-[#f8f8f8]'
     return (
         <button className={className + padding + bgColor + ' h-full'}>
-            <Image className='flex flex-row content-center text-[#212121] sm:hover:cursor-pointer' src={src} alt='icon' />
+            <Image className='flex flex-row content-center text-[#212121] sm:hover:cursor-pointer' src={src} alt='icon' priority />
         </button>
     );
 }

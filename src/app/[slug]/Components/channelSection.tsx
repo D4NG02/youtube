@@ -12,8 +12,8 @@ import Image from "next/image";
 export default function ChannelSection() {
     const [open, setOpen] = useState<boolean>(false)
     const [channel, setChannel] = useState<{
-        title: string, description: string, customUrl: string, subscriberCount: number, thumbnails: string, videoCount: number, viewCount: number, joinDate: string
-    }>({ title: '', description: '', customUrl: '', subscriberCount: 0, thumbnails: '', videoCount: 0, viewCount: 0, joinDate: '' })
+        title: string, description: string, url: string, subscriberCount: string, thumbnails: string, videoCount: string, viewCount: string, joinDate: string
+    }>({ title: '', description: '', url: '', subscriberCount: '', thumbnails: '', videoCount: '', viewCount: '', joinDate: '' })
 
     useEffect(() => {
         getChannelDetail()
@@ -33,11 +33,11 @@ export default function ChannelSection() {
         setChannel({
             title: res.items[0].snippet.title,
             description: res.items[0].snippet.description,
-            customUrl: res.items[0].snippet.customUrl,
-            subscriberCount: Number(res.items[0].statistics.subscriberCount),
+            url: res.items[0].snippet.url,
+            subscriberCount: Number(res.items[0].statistics.subscriberCount).toLocaleString('en-US'),
             thumbnails: res.items[0].snippet.thumbnails.default.url,
-            videoCount: Number(res.items[0].statistics.videoCount),
-            viewCount: Number(res.items[0].statistics.viewCount),
+            videoCount: Number(res.items[0].statistics.videoCount).toLocaleString('en-US'),
+            viewCount: Number(res.items[0].statistics.viewCount).toLocaleString('en-US'),
             joinDate: moment(res.items[0].snippet.publishedAt).format('ll').toString(),
         })
     }
@@ -50,13 +50,13 @@ export default function ChannelSection() {
                 </div>
                 <div className="w-full">
                     <h2 className="text-3xl">{channel.title}</h2>
-                    <p className="text-base">{channel.customUrl}</p>
-                    <p className="text-base">{channel.subscriberCount.toLocaleString('en-US')} subscribers ‧ {channel.videoCount} videos</p>
+                    <p className="text-base">{channel.url}</p>
+                    <p className="text-base">{channel.subscriberCount} subscribers ‧ {channel.videoCount} videos</p>
                 </div>
             </div>
             <div className="flex">
                 <p className="text-base line-clamp-1 w-[calc(100%-24px)]">{channel.description}</p>
-                <button onClick={() => setOpen(true)}><Image className="text-[#0f0f0f] w-6" src={IconArrowRight} alt='icon' /></button>
+                <button onClick={() => setOpen(true)}><Image className="text-[#0f0f0f] w-6" src={IconArrowRight} alt='icon' priority /></button>
             </div>
 
             {open && <Popup children={<PopupContainer channel={channel} />} onClose={() => { setOpen(false) }} />}
