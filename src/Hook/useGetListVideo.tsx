@@ -4,7 +4,7 @@ import moment from "moment";
 import { parse } from "iso8601-duration";
 
 export default async function useGetListVideo() {
-    const endpoint: string = 'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails&part=statistics&part=snippet&part=player&chart=mostPopular&maxResults=1&key=' + process.env.NEXT_PUBLIC_YT_KEY
+    const endpoint: string = 'https://youtube.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet,player&chart=mostPopular&maxResults=1&key=' + process.env.NEXT_PUBLIC_YT_KEY
     let video: {
         thumbnail: string,
         channelId: string,
@@ -30,6 +30,7 @@ export default async function useGetListVideo() {
         if (res.items) {
             video = []
             res.items.map((item: any) => {
+                console.log(item)
                 let timeDiff: string = '0'
                 const publishDate = moment(item.snippet.publishedAt)
                 if (currentDate.diff(publishDate, 'hours') > 1 && currentDate.diff(publishDate, 'hours') < 25) {

@@ -1,9 +1,8 @@
 import IconMore from "@/Media/IconMore.svg";
 import IconButton from "./IconButton";
-import { useEffect, useState } from "react";
-import useGetChannel from "@/Hook/useGetChannel";
+
 import { useStateProvider } from "@/Utility/StateProvider";
-import { reducerCases } from "@/Utility/constant";
+import Link from "next/link";
 
 export default function VideoCard({ detail }: {
     detail: {
@@ -16,44 +15,32 @@ export default function VideoCard({ detail }: {
         duration: string
     }
 }) {
-    const [{ channelList }, dispatch] = useStateProvider()
-
-    useEffect(() => {
-        getChannel()
-    }, [])
-
-    const getChannel = async () => {
-        const res = await useGetChannel(detail.channelId)
-        dispatch({
-            type: reducerCases.SET_CHANNEL_LIST,
-            channelList: [...channelList, res]
-        })
-    }
-
-    const navigateChannel = () => {
-    }
-    const navigateVideo = () => {
-        window.open(detail.watch)
-    }
+    const [{ channelList }, _] = useStateProvider()
 
     return (
         <div className="card flex flex-col gap-2">
-            <a className="w-full h-[190px] sm:w-[120px] sm:h-[90px]" target='_self' href={detail.watch}>
-                <img className="max-w-none w-full h-full rounded-md" src={detail.thumbnail} alt="thumbnails" />
-            </a>
-            <div className="flex flex-row gap-4">
-                <a className="font-normal text-sm" target='_self' href={channelList.url}>
-                    <img className="max-w-none w-[36px] h-[36px] rounded-md" src={channelList.thumbnails} alt="channel icon" />
-                </a>
-                <div className="w-[calc(100%-36px-24px)] flex flex-col">
-                    <a className="font-medium text-base pb-1" target='_self' href={detail.watch}>
-                        <h4>{detail.title}</h4>
-                    </a>
-                    <a className="font-normal text-sm" target='_self' href={channelList.url}>{channelList.title}</a>
-                    <a className="font-normal text-sm" href={detail.watch}>{detail.view} ‧ {detail.sinceTime}</a>
+            {channelList && <>
+                <Link href={detail.watch} className="w-full h-[190px] sm:w-[120px] sm:h-[90px]">
+                    <img className="max-w-none w-full h-full rounded-md" src={detail.thumbnail} alt="thumbnails" />
+                </Link>
+                <div className="flex flex-row gap-4">
+                    <Link href={detail.watch} className="font-normal text-sm">
+                        <img className="max-w-none w-[36px] h-[36px] rounded-md" src={channelList.thumbnails} alt="channel icon" />
+                    </Link>
+                    <div className="w-[calc(100%-36px-24px)] flex flex-col">
+                        <Link href={detail.watch} className="font-medium text-base pb-1">
+                            <h4>{detail.title}</h4>
+                        </Link>
+                        <Link href={'channelList.url'} className="font-normal text-sm">
+                            {channelList.title}
+                        </Link>
+                        <Link href={detail.watch} className="font-normal text-sm">
+                            {detail.view} ‧ {detail.sinceTime}
+                        </Link>
+                    </div>
+                    <IconButton src={IconMore} className="bg-transparent" />
                 </div>
-                <IconButton src={IconMore} className="bg-transparent" />
-            </div>
+            </>}
         </div>
     );
 }
